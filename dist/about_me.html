@@ -23,7 +23,7 @@
 </head>
 
 <body
-  class="dark:bg-black bg-white h-screen text-black dark:text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+  class="bg-black h-screen text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
   <!-- Navbar -->
   <header class="flex w-full overflow-hidden pt-10 pb-1">
     <nav id="nav" x-data="{ open: false }" role="navigation" class="w-full">
@@ -33,7 +33,7 @@
         </div>
         <div class="ml-auto md:hidden flex items-center justify-start">
           <button onclick="menuToggle()" @click="open = !open"
-            class="tap-highlight-transparent text-black dark:text-white w-5 h-5 relative focus:outline-none"
+            class="tap-highlight-transparent text-white w-5 h-5 relative focus:outline-none"
             @click="open = !open">
             <span class="sr-only">Open main menu</span>
             <div class="block w-5 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -102,11 +102,11 @@
     <div class="grid grid-cols-2 gap-14 md:gap-20">
       <div class="col-span-2 md:col-span-1">
         <div
-          class="bg-white dark:bg-neutral-900 p-5 pb-28 m-6 md:m-12 shadow-lg border border-gray-100 dark:border-neutral-800 hover:rotate-0 transition duration-500 -rotate-6 relative">
+          class="bg-neutral-900 p-5 pb-28 m-6 md:m-12 shadow-lg border border-neutral-800 hover:rotate-0 transition duration-500 -rotate-6 relative">
           <img src="./assets/Avatar.jpg" alt=""
             class="smooth-edges flex flex-col w-full aspect-square object-cover h-auto" />
           <div class="absolute bottom-0 left-0 right-0 text-center">
-            <p class="text-gray-800 dark:text-slate-200 pb-7 h-full text-6xl font-nothingyoucoulddo"></p>
+            <p class="text-slate-200 pb-7 h-full text-6xl font-nothingyoucoulddo"></p>
           </div>
         </div>
 
@@ -137,11 +137,11 @@
       <div class="grid grid-cols-1 gap-8 text-center mx-auto">
         <div>
           <p class="font-signika"><b>DANIEL FOSTER PHOTOGRAPHY</b></p>
-          <p class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+          <p class="mt-4 text-sm text-gray-300">
             Amsterdam, Netherlands<br />
           </p>
           <div class="flex mx-auto">
-            <div class="mx-auto space-x-6 flex mt-8 text-gray-600 dark:text-gray-300">
+            <div class="mx-auto space-x-6 flex mt-8 text-gray-300">
               <a class="transition duration-300 hover:opacity-75" href="https://www.instagram.com/dfoster.photography" target="_blank"
                 rel="noreferrer">
                 <span class="sr-only"> Instagram </span>
@@ -155,7 +155,7 @@
           </div>
         </div>
       </div>
-      <p class="mt-8 text-xs text-gray-600 dark:text-gray-300 text-center">
+      <p class="mt-8 text-xs text-gray-300 text-center">
         © 2024 Basis for website developed and designed by
         <a href="https://www.linkedin.com/in/joão-franco-452161195/" class="underline">João Franco</a> All photos © 2024 Daniel Foster
       </p>
