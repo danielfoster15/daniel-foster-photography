@@ -41,7 +41,7 @@ html {
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-     tab-size: 4;
+  tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -82,7 +82,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -351,7 +351,8 @@ textarea {
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
 
-input::-moz-placeholder, textarea::-moz-placeholder {
+input::-moz-placeholder,
+textarea::-moz-placeholder {
   opacity: 1;
   /* 1 */
   color: #9ca3af;
@@ -419,7 +420,9 @@ video {
   display: none;
 }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -429,16 +432,16 @@ video {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -446,24 +449,24 @@ video {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 ::backdrop {
@@ -476,16 +479,16 @@ video {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -493,24 +496,24 @@ video {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 .container {
@@ -687,6 +690,10 @@ video {
   height: 8rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
 .h-5 {
   height: 1.25rem;
 }
@@ -709,6 +716,10 @@ video {
 
 .max-h-full {
   max-height: 100%;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .w-5 {
@@ -839,19 +850,19 @@ video {
   gap: 2rem;
 }
 
-.space-x-5 > :not([hidden]) ~ :not([hidden]) {
+.space-x-5> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1.25rem * var(--tw-space-x-reverse));
   margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-x-6 > :not([hidden]) ~ :not([hidden]) {
+.space-x-6> :not([hidden])~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(1.5rem * var(--tw-space-x-reverse));
   margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.space-y-8 > :not([hidden]) ~ :not([hidden]) {
+.space-y-8> :not([hidden])~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
@@ -904,12 +915,12 @@ video {
 
 .object-cover {
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .object-center {
   -o-object-position: center;
-     object-position: center;
+  object-position: center;
 }
 
 .p-1 {
@@ -1141,7 +1152,7 @@ video {
 
 @keyframes wave {
   0% {
-    transform: rotate( 0.0deg)
+    transform: rotate(0.0deg)
   }
 
   10% {
@@ -1165,11 +1176,11 @@ video {
   }
 
   60% {
-    transform: rotate( 0.0deg)
+    transform: rotate(0.0deg)
   }
 
   100% {
-    transform: rotate( 0.0deg)
+    transform: rotate(0.0deg)
   }
 }
 
@@ -1345,7 +1356,7 @@ video {
     gap: 5rem;
   }
 
-  .md\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
+  .md\:space-x-5> :not([hidden])~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(1.25rem * var(--tw-space-x-reverse));
     margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
