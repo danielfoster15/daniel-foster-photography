@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daniel Foster - Darkroom Workshops</title>
+  <meta name="description" content="Darkroom film development workshops with Daniel Foster in Amsterdam, NL." />
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
+  <link rel="stylesheet" href="output.css" />
+  <link rel="stylesheet" href="../styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black h-screen text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+  <div id="site-nav"></div>
+
+  <div class="container mx-auto text-center">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl pt-10 pb-4 font-bold font-signika">DARKROOM WORKSHOPS</h1>
+    <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
+      <!-- TODO: workshop pitch — what you teach, where, how long, group size -->
+      [Workshop intro — learn to develop your own black &amp; white film in the darkroom…]
+    </p>
+
+    <!-- Process photos -->
+    <!-- TODO: replace .ph placeholders with darkroom/process photos, data-fancybox="workshop" -->
+    <section class="mb-12">
+      <div class="flex flex-wrap">
+        <div class="w-full md:w-1/3 p-1"><div class="ph aspect-[3/2]">PROCESS PHOTO 1</div></div>
+        <div class="w-full md:w-1/3 p-1"><div class="ph aspect-[3/2]">PROCESS PHOTO 2</div></div>
+        <div class="w-full md:w-1/3 p-1"><div class="ph aspect-[3/2]">PROCESS PHOTO 3</div></div>
+      </div>
+    </section>
+
+    <!-- What you'll learn -->
+    <section class="max-w-2xl mx-auto mb-12 text-left">
+      <h2 class="text-2xl md:text-3xl font-signika font-bold pb-4 text-center">WHAT YOU'LL LEARN</h2>
+      <ul class="list-disc list-inside space-y-2 text-neutral-300">
+        <!-- TODO: adjust to your actual curriculum -->
+        <li>[Loading film onto reels in complete darkness]</li>
+        <li>[Mixing chemistry: developer, stop bath, fixer]</li>
+        <li>[Developing, agitation, and timing]</li>
+        <li>[Drying, sleeving, and evaluating negatives]</li>
+      </ul>
+    </section>
+
+    <!-- Practical details -->
+    <section class="max-w-2xl mx-auto mb-12 text-neutral-300">
+      <h2 class="text-2xl md:text-3xl font-signika font-bold pb-4 text-white">DETAILS</h2>
+      <p>
+        <!-- TODO: fill in real details -->
+        [Location — Amsterdam, NL] &middot; [Duration] &middot; [Group size] &middot; [Price]<br />
+        [What to bring / what's included]
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <div class="my-16">
+      <a href="contact.html" class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
+        Ask about the next workshop
+      </a>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="nav.js"></script>
+  <script src="footer.js"></script>
+  <script src="fade_in.js"></script>
+  <script src="menu.js"></script>
+  <script>Fancybox.bind("[data-fancybox]", {});</script>
+</body>
+
+</html>
