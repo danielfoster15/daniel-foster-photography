@@ -1,0 +1,27 @@
+/* Shared site styles (referenced by all pages) */
+
+/* Hide Alpine-controlled elements until Alpine initializes */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Mobile menu open state — height:auto so the menu fits any number of items */
+.menu-open {
+  height: auto !important;
+}
+
+/* Placeholder tiles used while real assets are pending */
+.ph {
+  background: #171717;
+  border: 1px dashed #525252;
+  color: #737373;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+}
