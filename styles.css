@@ -10,6 +10,45 @@
   height: auto !important;
 }
 
+/* Zine slideshow — dark theme for the Fancybox carousel */
+.f-carousel {
+  --f-button-bg: rgba(255, 255, 255, 0.1);
+  --f-button-hover-bg: rgba(255, 255, 255, 0.25);
+  --f-button-color: #fff;
+  --f-button-hover-color: #fff;
+}
+
+/* Cap the stage so a tall portrait spread can't swallow the viewport */
+.f-carousel__slide img {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+/* Thumbnail strip lives in a sibling .f-thumbs container */
+.f-carousel__thumbs {
+  --f-thumb-width: 64px;
+  --f-thumb-height: 64px;
+  --f-thumb-outline: 2px;
+  --f-thumb-outline-color: #fff;
+  --f-thumb-selected-outline-color: #fff;
+  margin-top: 1rem;
+}
+
+/* Keep unselected thumbnails quiet */
+.f-thumbs__slide {
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.f-thumbs__slide:hover,
+.f-thumbs__slide.is-nav-selected {
+  opacity: 1;
+}
+
 /* Placeholder tiles used while real assets are pending */
 .ph {
   background: #171717;
