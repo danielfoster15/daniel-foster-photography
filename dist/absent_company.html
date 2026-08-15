@@ -15,6 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+  <!-- Carousel (same vendor as Fancybox) for the zine slideshow -->
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.thumbs.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.thumbs.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -139,11 +144,40 @@
         [Zine blurb — description, format, pages, edition.]
       </p>
 
-      <div class="flex flex-wrap items-start">
-        <!-- Zine photos -->
-        <div class="w-full md:w-1/2 p-1"><div class="ph aspect-square">ZINE PHOTO — cover</div></div>
-        <div class="w-full md:w-1/4 p-1"><div class="ph aspect-square">ZINE PHOTO — spread</div></div>
-        <div class="w-full md:w-1/4 p-1"><div class="ph aspect-square">ZINE PHOTO — detail</div></div>
+      <!-- Zine slideshow.
+           TODO: the slides below currently reuse collection photographs so the
+           slideshow is visible while the real assets are pending. Replace each
+           slide's href + src with photos of the printed zine (cover, spreads,
+           detail shots) from ../images/zine/ and update the alt text. Add or
+           remove .f-carousel__slide blocks freely — the carousel adapts. -->
+      <div class="max-w-3xl mx-auto">
+        <div id="zine-carousel" class="f-carousel">
+          <div class="f-carousel__slide" data-thumb-src="../images/absent-company/thumbs/ac-01.jpg">
+            <a href="../images/absent-company/ac-01.jpg" data-fancybox="zine">
+              <img src="../images/absent-company/ac-01.jpg" alt="The cover of the Absent Company zine" />
+            </a>
+          </div>
+          <div class="f-carousel__slide" data-thumb-src="../images/absent-company/thumbs/ac-10.jpg">
+            <a href="../images/absent-company/ac-10.jpg" data-fancybox="zine">
+              <img src="../images/absent-company/ac-10.jpg" alt="A spread from the Absent Company zine" />
+            </a>
+          </div>
+          <div class="f-carousel__slide" data-thumb-src="../images/absent-company/thumbs/ac-08.jpg">
+            <a href="../images/absent-company/ac-08.jpg" data-fancybox="zine">
+              <img src="../images/absent-company/ac-08.jpg" alt="A spread from the Absent Company zine" />
+            </a>
+          </div>
+          <div class="f-carousel__slide" data-thumb-src="../images/absent-company/thumbs/ac-05.jpg">
+            <a href="../images/absent-company/ac-05.jpg" data-fancybox="zine">
+              <img src="../images/absent-company/ac-05.jpg" alt="A detail of the printed zine" />
+            </a>
+          </div>
+          <div class="f-carousel__slide" data-thumb-src="../images/absent-company/thumbs/ac-22.jpg">
+            <a href="../images/absent-company/ac-22.jpg" data-fancybox="zine">
+              <img src="../images/absent-company/ac-22.jpg" alt="A detail of the printed zine" />
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- Video: flip-through -->
@@ -171,7 +205,18 @@
   <script src="footer.js"></script>
   <script src="fade_in.js"></script>
   <script src="menu.js"></script>
-  <script>Fancybox.bind("[data-fancybox]", {});</script>
+  <script>
+    Fancybox.bind("[data-fancybox]", {});
+
+    // Zine slideshow: crossfading stage + thumbnail strip.
+    // Autoplay is deliberately off — a reader should set the pace.
+    new Carousel(document.getElementById("zine-carousel"), {
+      infinite: true,
+      transition: "crossfade",
+      Dots: false,
+      Thumbs: { type: "classic" },
+    }, { Thumbs });
+  </script>
 </body>
 
 </html>
