@@ -10,7 +10,7 @@
           <div class="flex mx-auto">
             <div class="mx-auto space-x-6 flex mt-8 text-gray-300">
               <a class="transition duration-300 hover:opacity-75"
-                href="https://www.instagram.com/dfoster.photography" target="_blank" rel="noreferrer">
+                href="https://www.instagram.com/danielfoster.photography" target="_blank" rel="noreferrer">
                 <span class="sr-only">Instagram</span>
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
