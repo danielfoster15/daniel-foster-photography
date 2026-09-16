@@ -48,9 +48,6 @@
                 <li class="group/sub py-1">
                   <a href="${d}events.html" class="font-signika text-xl tap-highlight-transparent uppercase">Events</a>
                 </li>
-                <li class="group/sub py-1">
-                  <a href="${d}digital.html" class="font-signika text-xl tap-highlight-transparent uppercase">Digital</a>
-                </li>
               </ul>
             </li>
             <li class="group transition duration-300">
@@ -63,7 +60,7 @@
               <a href="${d}contact.html" ${link}>CONTACT${underline}</a>
             </li>
             <li class="mt-2 md:mt-0">
-              <a href="https://www.instagram.com/dfoster.photography" target="_blank" rel="noreferrer">
+              <a href="https://www.instagram.com/danielfoster.photography" target="_blank" rel="noreferrer">
                 <span class="sr-only">Instagram</span>
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
