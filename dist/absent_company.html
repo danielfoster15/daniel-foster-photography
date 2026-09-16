@@ -10,9 +10,6 @@
   <link rel="stylesheet" href="output.css" />
   <link rel="stylesheet" href="../styles.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
   <!-- Carousel (same vendor as Fancybox) for the zine slideshow -->
@@ -30,8 +27,10 @@
   <div class="container mx-auto text-center">
     <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl pt-10 pb-4 font-bold font-signika">ABSENT COMPANY</h1>
     <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
-      <!-- TODO: one- or two-sentence introduction to the collection -->
-      [Collection introduction — a few sentences about Absent Company.]
+      A collection of black and white prints developed in my own
+      photographic darkroom. Street photography from the summer of 2025 in
+      Amsterdam, New York City, Philadelphia, and Virginia exploring topics of
+      burnout and male loneliness.
     </p>
 
     <section class="mb-8">
@@ -229,10 +228,22 @@
     <!-- The Zine -->
     <section id="zine" class="my-20 border-t border-neutral-800 pt-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold font-signika pb-4">ABSENT COMPANY — THE ZINE</h2>
-      <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
-        <!-- TODO: zine blurb — what it is, page count, print details, edition size -->
-        [Zine blurb — description, format, pages, edition.]
-      </p>
+      <dl class="max-w-xl mx-auto pb-10 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-left text-sm">
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Edition</dt>
+        <dd class="text-neutral-300">100, signed</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Pages</dt>
+        <dd class="text-neutral-300">32 pages in 2 &times; 4-page covers</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Size</dt>
+        <dd class="text-neutral-300">14,4 &times; 22,3 cm, portrait</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Paper</dt>
+        <dd class="text-neutral-300">Inside pages Munken Lynx Rough, 150&nbsp;gsm<br />Covers Munken Lynx Rough, 300&nbsp;gsm</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Print</dt>
+        <dd class="text-neutral-300">Black &amp; white (digital print)</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Printed by</dt>
+        <dd class="text-neutral-300">Drukkerij Raddraaier SSP, Amsterdam</dd>
+        <dt class="text-neutral-500 uppercase tracking-widest text-xs pt-1">Published</dt>
+        <dd class="text-neutral-300">Amsterdam, 2026</dd>
+      </dl>
 
       <!-- Zine slideshow: photos of the printed object. Add or remove
            .f-carousel__slide blocks freely — the carousel adapts. -->
@@ -277,11 +288,14 @@
 
       <!-- Buy -->
       <div class="mt-12 pb-10">
-        <!-- TODO: real shop link -->
-        <a href="#" class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
-          Buy the zine — &euro;XX
+        <!-- No shop yet: orders come in by email or Instagram DM. -->
+        <a href="mailto:dansterdam.art@gmail.com?subject=Absent%20Company%20zine%20order" class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
+          Buy the zine — &euro;25
         </a>
-        <p class="mt-4 text-sm text-neutral-400">[Shipping / ordering note]</p>
+        <p class="mt-4 text-sm text-neutral-400">&euro;25 excl. shipping. To order, email
+          <a href="mailto:dansterdam.art@gmail.com?subject=Absent%20Company%20zine%20order" class="underline">dansterdam.art@gmail.com</a>
+          or send a DM on
+          <a href="https://www.instagram.com/danielfoster.photography" target="_blank" rel="noreferrer" class="underline">Instagram</a>.</p>
       </div>
     </section>
   </div>
