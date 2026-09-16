@@ -1,3 +1,62 @@
+/* LT Remark (SIL Open Font License, see fonts/README.md), used site-wide. */
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-BoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-BlackItalic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* One typeface everywhere. The element prefix outranks Tailwind's own
+   font utilities, which the CDN build injects after this stylesheet. */
+html body,
+html body .font-signika,
+html body .font-serif,
+html body .font-sans,
+html body .font-nothingyoucoulddo {
+  font-family: "LT Remark", Georgia, "Times New Roman", serif;
+}
+
 /* Shared site styles (referenced by all pages) */
 
 /* Hide Alpine-controlled elements until Alpine initializes */
