@@ -3,7 +3,9 @@ const menu = document.getElementById("menu");
 const ulMenu = document.getElementById("ulMenu");
 
 function menuToggle() {
-  menu.classList.toggle("h-32");
+  // height:auto (via .menu-open) so the menu fits any number of items,
+  // including the expanded WORK submenu
+  menu.classList.toggle("menu-open");
 }
 
 // Browser resize listener
@@ -13,7 +15,7 @@ window.addEventListener("resize", menuResize);
 function menuResize() {
   // First get the size from the window
   const window_size = window.innerWidth || document.body.clientWidth;
-  if (window_size > 640) {
-    menu.classList.remove("h-32");
+  if (window_size >= 1024) {
+    menu.classList.remove("menu-open");
   }
 }
