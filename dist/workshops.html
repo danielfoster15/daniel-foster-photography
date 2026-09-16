@@ -21,8 +21,9 @@
   <div class="container mx-auto text-center">
     <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl pt-10 pb-4 font-bold font-signika">DARKROOM WORKSHOPS</h1>
     <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
-      <!-- TODO: workshop pitch — what you teach, where, how long, group size -->
-      [Workshop intro — learn to develop your own black &amp; white film in the darkroom…]
+      Learn to develop your first roll of film and print your first black&amp;white
+      photo while listening to my CD/Vinyl collection and sipping on a glass of
+      wine, a cold beer, or a warm cup of tea.
     </p>
 
     <!-- Process photos — add more tiles as you have them -->
@@ -41,17 +42,17 @@
     <!-- What you'll learn -->
     <section class="max-w-2xl mx-auto mb-12 text-left">
       <h2 class="text-2xl md:text-3xl font-signika font-bold pb-4 text-center">WHAT YOU'LL LEARN</h2>
-      <ul class="list-disc list-inside space-y-2 text-neutral-300">
-        <!-- TODO: adjust to your actual curriculum -->
-        <li>[Loading film onto reels in complete darkness]</li>
-        <li>[Mixing chemistry: developer, stop bath, fixer]</li>
-        <li>[Developing, agitation, and timing]</li>
-        <li>[Drying, sleeving, and evaluating negatives]</li>
+      <ul class="list-disc list-outside pl-5 space-y-2 text-neutral-300">
+        <li>Loading film onto reels in complete darkness</li>
+        <li>Developing, agitation, and timing</li>
+        <li>Printing contact sheets</li>
+        <li>Making photographic prints on an enlarger and developing them in chemistry</li>
+        <li>Perfecting prints with dodging and burning and contrast filters</li>
       </ul>
     </section>
 
-    <!-- Practical details -->
-    <section class="max-w-2xl mx-auto mb-12 text-neutral-300">
+    <!-- Practical details — HIDDEN for now; delete `hidden` to show again. -->
+    <section hidden class="max-w-2xl mx-auto mb-12 text-neutral-300">
       <h2 class="text-2xl md:text-3xl font-signika font-bold pb-4 text-white">DETAILS</h2>
       <p>
         <!-- TODO: fill in real details -->
@@ -64,7 +65,9 @@
          Short share link: https://calendar.app.google/SoL6iU6MPdzuJzE76
          To swap in a different schedule, replace the iframe src (keep ?gv=true)
          and the button href below. -->
-    <section id="booking" class="my-20 border-t border-neutral-800 pt-16">
+    <!-- HIDDEN for now. To bring booking back: delete `hidden` below and
+         rename the iframe's data-src back to src. -->
+    <section id="booking" hidden class="my-20 border-t border-neutral-800 pt-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-signika font-bold pb-4">BOOK A SPOT</h2>
       <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
         Pick a date below and book directly &mdash; you'll get a confirmation by email.
@@ -74,7 +77,7 @@
            around it is deliberate so it doesn't look broken against the page. -->
       <div class="max-w-3xl mx-auto bg-white rounded p-2">
         <iframe
-          src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ18zUwqA-oKoaABkjtbLdWqJU866VZqXum9h7iYn-7y5yD2xbqvbD21YQrx61ubazoYvXwpN7Si?gv=true"
+          data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ18zUwqA-oKoaABkjtbLdWqJU866VZqXum9h7iYn-7y5yD2xbqvbD21YQrx61ubazoYvXwpN7Si?gv=true"
           title="Book a darkroom workshop"
           loading="lazy" width="100%" height="700" frameborder="0"
           style="border:0"></iframe>
@@ -91,6 +94,31 @@
         </p>
       </div>
     </section>
+
+    <!-- Info list signup. Each signup is emailed to dansterdam.art@gmail.com
+         by FormSubmit (formsubmit.co) — no account needed, but the FIRST
+         submission sends a one-time activation email that must be clicked. -->
+    <section id="signup" class="my-20 border-t border-neutral-800 pt-16">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-signika font-bold pb-8">SIGN UP FOR THE NEWSLETTER / INFO LIST</h2>
+      <form id="signup-form" action="https://formsubmit.co/dansterdam.art@gmail.com" method="POST"
+        class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+        <input type="hidden" name="_subject" value="New signup: workshop info list" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <!-- Honeypot: invisible to people, filled in by spam bots. -->
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"
+          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+        <label for="signup-email" class="sr-only">Email address</label>
+        <input id="signup-email" type="email" name="email" required autocomplete="email"
+          placeholder="your@email.com"
+          class="flex-1 bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 rounded px-4 py-3 focus:outline-none focus:border-white" />
+        <button type="submit"
+          class="border border-white px-6 py-3 font-signika tracking-widest uppercase hover:bg-white hover:text-black transition duration-300 disabled:opacity-50">
+          Sign up
+        </button>
+      </form>
+      <p id="signup-status" class="mt-4 text-sm text-neutral-300 min-h-[1.25rem]" aria-live="polite"></p>
+    </section>
   </div>
 
   <div id="site-footer"></div>
@@ -99,6 +127,40 @@
   <script src="fade_in.js"></script>
   <script src="menu.js"></script>
   <script>Fancybox.bind("[data-fancybox]", {});</script>
+  <script>
+    (function () {
+      var form = document.getElementById("signup-form");
+      var status = document.getElementById("signup-status");
+      var button = form.querySelector("button");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (form.elements._honey.value) return;          // a bot filled the trap
+        var email = form.elements.email.value.trim();
+        button.disabled = true;
+        status.textContent = "Signing you up\u2026";
+        fetch("https://formsubmit.co/ajax/dansterdam.art@gmail.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({
+            email: email,
+            _subject: form.elements._subject.value,
+            _template: "table",
+            _captcha: "false"
+          })
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (res) {
+            if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message);
+            status.textContent = "Thanks \u2014 you\u2019re on the list.";
+            form.reset();
+          })
+          .catch(function () {
+            status.textContent = "That didn\u2019t go through. Please email dansterdam.art@gmail.com instead.";
+          })
+          .then(function () { button.disabled = false; });
+      });
+    })();
+  </script>
 </body>
 
 </html>
