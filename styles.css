@@ -48,7 +48,7 @@
 }
 
 /* One typeface everywhere. The element prefix outranks Tailwind's own
-   font utilities, which the CDN build injects after this stylesheet. */
+   font utilities in output.css. */
 html body,
 html body .font-signika,
 html body .font-serif,

@@ -9,10 +9,12 @@
   <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
   <link rel="stylesheet" href="output.css" />
   <link rel="stylesheet" href="../styles.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"
+    integrity="sha384-5/joNqFnRyVWzXp99bHot6RHG+EksGp+USSgZwPar7T9SD9PKKER37n/8bXBAZGd" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js"
+    integrity="sha384-BodKYo5iRmFaqEaP1o8AAu9hCHqLvNhSWEg12QF1IjPnl1SgsrwQMSMKUB4POJ18" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css"
+    integrity="sha384-qlUhevqmCF5AxtnfkF0zXJClBzA6GJuX/UrLejCfE61bBGt+zo/My0AJ+ojVmUSb" crossorigin="anonymous" />
 </head>
 
 <body class="bg-black h-screen text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
@@ -95,19 +97,18 @@
       </div>
     </section>
 
-    <!-- Info list signup. Each signup is emailed to [email removed]
-         by FormSubmit (formsubmit.co) — no account needed, but the FIRST
-         submission sends a one-time activation email that must be clicked. -->
+    <!-- Newsletter signup, run by Buttondown (buttondown.com). Buttondown
+         emails each new address a confirmation link, and only confirmed
+         subscribers join the list. Newsletters are written and sent from the
+         Buttondown dashboard. Buttondown asks for a plain form post (not
+         fetch) so it can show a CAPTCHA when needed; its confirmation page
+         opens in a new tab so the visitor stays on this page. -->
     <section id="signup" class="my-20 border-t border-neutral-800 pt-16">
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-signika font-bold pb-8">SIGN UP FOR THE NEWSLETTER / INFO LIST</h2>
-      <form id="signup-form" action="https://formsubmit.co/[email removed]" method="POST"
+      <form id="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+        method="post" target="_blank" rel="noopener"
         class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-        <input type="hidden" name="_subject" value="New signup: workshop info list" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
-        <!-- Honeypot: invisible to people, filled in by spam bots. -->
-        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"
-          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+        <input type="hidden" name="embed" value="1" />
         <label for="signup-email" class="sr-only">Email address</label>
         <input id="signup-email" type="email" name="email" required autocomplete="email"
           placeholder="your@email.com"
@@ -131,33 +132,13 @@
     (function () {
       var form = document.getElementById("signup-form");
       var status = document.getElementById("signup-status");
-      var button = form.querySelector("button");
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (form.elements._honey.value) return;          // a bot filled the trap
-        var email = form.elements.email.value.trim();
-        button.disabled = true;
-        status.textContent = "Signing you up\u2026";
-        fetch("https://formsubmit.co/ajax/[email removed]", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            _subject: form.elements._subject.value,
-            _template: "table",
-            _captcha: "false"
-          })
-        })
-          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-          .then(function (res) {
-            if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message);
-            status.textContent = "Thanks \u2014 you\u2019re on the list.";
-            form.reset();
-          })
-          .catch(function () {
-            status.textContent = "That didn\u2019t go through. Please email [email removed] instead.";
-          })
-          .then(function () { button.disabled = false; });
+      form.addEventListener("submit", function () {
+        // The browser has already read the fields by now, so clearing them
+        // after this tick doesn't affect what gets sent to Buttondown.
+        setTimeout(function () {
+          status.textContent = "Almost done \u2014 check your inbox for an email to confirm your subscription.";
+          form.reset();
+        }, 0);
       });
     })();
   </script>
