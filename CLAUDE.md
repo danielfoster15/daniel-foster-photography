@@ -7,6 +7,6 @@
 - Third-party scripts are pinned to exact versions with `integrity` hashes. When bumping a
   version, recompute the hash for the new file (sha384) or the browser will refuse to load it.
 - Keep the owner's email address out of the pages: the contact form posts to a FormSubmit
-  alias, and the newsletter signup posts to Buttondown.
+  alias, and the newsletter signup posts to Kit (form 9977241).
 - Gallery grids show the files in `images/<series>/thumbs/`; when renumbering photos, rename
   the matching thumbnails and move each `alt` text with its photo.

@@ -28,6 +28,27 @@
       wine, a cold beer, or a warm cup of tea.
     </p>
 
+    <!-- Newsletter signup, run by Kit (kit.com, form 9977241). Kit emails each
+         new address a confirmation link (the form's "incentive email"), and only
+         confirmed subscribers join the list. Newsletters are written and sent
+         from the Kit dashboard. In the form's Kit settings, "after subscribing"
+         redirects back here with ?subscribed=1, which shows the message below. -->
+    <section id="signup" class="max-w-2xl mx-auto mb-12">
+      <h2 class="text-2xl md:text-3xl font-signika font-bold pb-4">SIGN UP FOR THE NEWSLETTER / INFO LIST</h2>
+      <form id="signup-form" action="https://app.kit.com/forms/9977241/subscriptions" method="post"
+        class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+        <label for="signup-email" class="sr-only">Email address</label>
+        <input id="signup-email" type="email" name="email_address" required autocomplete="email"
+          placeholder="your@email.com"
+          class="flex-1 bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 rounded px-4 py-3 focus:outline-none focus:border-white" />
+        <button type="submit"
+          class="border border-white px-6 py-3 font-signika tracking-widest uppercase hover:bg-white hover:text-black transition duration-300 disabled:opacity-50">
+          Sign up
+        </button>
+      </form>
+      <p id="signup-status" class="mt-4 text-sm text-neutral-300 min-h-[1.25rem]" aria-live="polite"></p>
+    </section>
+
     <!-- Process photos — add more tiles as you have them -->
     <section class="mb-12">
       <div class="flex flex-wrap justify-center">
@@ -96,30 +117,6 @@
         </p>
       </div>
     </section>
-
-    <!-- Newsletter signup, run by Buttondown (buttondown.com). Buttondown
-         emails each new address a confirmation link, and only confirmed
-         subscribers join the list. Newsletters are written and sent from the
-         Buttondown dashboard. Buttondown asks for a plain form post (not
-         fetch) so it can show a CAPTCHA when needed; its confirmation page
-         opens in a new tab so the visitor stays on this page. -->
-    <section id="signup" class="my-20 border-t border-neutral-800 pt-16">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-signika font-bold pb-8">SIGN UP FOR THE NEWSLETTER / INFO LIST</h2>
-      <form id="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/f908"
-        method="post" target="_blank" rel="noopener"
-        class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-        <input type="hidden" name="embed" value="1" />
-        <label for="signup-email" class="sr-only">Email address</label>
-        <input id="signup-email" type="email" name="email" required autocomplete="email"
-          placeholder="your@email.com"
-          class="flex-1 bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 rounded px-4 py-3 focus:outline-none focus:border-white" />
-        <button type="submit"
-          class="border border-white px-6 py-3 font-signika tracking-widest uppercase hover:bg-white hover:text-black transition duration-300 disabled:opacity-50">
-          Sign up
-        </button>
-      </form>
-      <p id="signup-status" class="mt-4 text-sm text-neutral-300 min-h-[1.25rem]" aria-live="polite"></p>
-    </section>
   </div>
 
   <div id="site-footer"></div>
@@ -132,14 +129,23 @@
     (function () {
       var form = document.getElementById("signup-form");
       var status = document.getElementById("signup-status");
+      var button = form.querySelector("button");
       form.addEventListener("submit", function () {
-        // The browser has already read the fields by now, so clearing them
-        // after this tick doesn't affect what gets sent to Buttondown.
-        setTimeout(function () {
-          status.textContent = "Almost done \u2014 check your inbox for an email to confirm your subscription.";
-          form.reset();
-        }, 0);
+        button.disabled = true;
+        status.textContent = "Signing you up\u2026";
       });
+      // Coming back with the browser's Back button can restore the page as it
+      // was mid-submit; make the form usable again.
+      window.addEventListener("pageshow", function (e) {
+        if (e.persisted) { button.disabled = false; status.textContent = ""; }
+      });
+      // Kit sends subscribers back here with ?subscribed=1 after they sign up.
+      var params = new URLSearchParams(window.location.search);
+      if (params.has("subscribed")) {
+        status.textContent = "Almost done \u2014 check your inbox for an email to confirm your subscription.";
+        // Drop the flag so a refresh doesn't show the message again.
+        history.replaceState(null, "", window.location.pathname + window.location.hash);
+      }
     })();
   </script>
 </body>
