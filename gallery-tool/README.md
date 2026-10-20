@@ -3,8 +3,10 @@
 Turns a zip of edited JPGs into a gallery page you can send to a client. The page looks like
 danielfosterphotography.nl: black background, white text, the LT Remark font. It has:
 
-- a grid of every photo, uncropped, in the order you exported them
-- a full-screen viewer with a download button for the full-size file
+- your highlights, shown large at the top: the photos you name `best1.jpg`, `best2.jpg`, ...
+- the rest of the photos one at a time, to swipe or click through, with a button that switches to
+  a grid of every photo, uncropped (without highlights the page opens on the grid)
+- a full-screen view with a download button for the full-size file
 - a download button on every photo
 - a **Download all** zip, split into parts when a shoot is too big for one file
 
@@ -39,7 +41,9 @@ a `client-galleries` folder in your home folder and uploaded straight to Cloudfl
 
 ## For each shoot
 
-1. Export the edited JPGs from Lightroom and zip them. A folder of JPGs also works.
+1. Export the edited JPGs from Lightroom and zip them. A folder of JPGs also works. To feature
+   favourites, rename them `best1.jpg`, `best2.jpg` and so on before zipping. They're shown large at
+   the top in that order, and the other photos follow in export order.
 2. Make the gallery:
    ```sh
    node gallery.mjs new ~/Downloads/phantom-four.zip --title "Phantom Four" --date "11 October 2026"

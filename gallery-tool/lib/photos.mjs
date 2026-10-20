@@ -30,10 +30,27 @@ function isJunk(name) {
   return name.split("/").includes("__MACOSX") || base.startsWith(".") || base === "Thumbs.db";
 }
 
-const byName = (a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+// The number in best1.jpg, best2.jpg, ... (also "Best 3.JPG", "best_4.jpeg"),
+// in any folder of the zip; undefined for every other photo.
+export function bestNumber(name) {
+  const match = path.posix.basename(name).match(/^best[\s_-]*(\d*)\.jpe?g$/i);
+  return match ? Number(match[1] || 0) : undefined;
+}
+
+// Highlights first, by their number; then the rest in file-name order.
+function byOrder(a, b) {
+  const [x, y] = [bestNumber(a.name), bestNumber(b.name)];
+  if (x !== undefined || y !== undefined) {
+    if (x === undefined) return 1;
+    if (y === undefined) return -1;
+    if (x !== y) return x - y;
+  }
+  return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+}
 
 // Returns { photos: [{ name, size, read() }], skipped: [name], tooBig: [name], close() },
-// photos in file-name order (the order Lightroom exported them in). skipped
+// photos named best1.jpg, best2.jpg, ... first, then the rest in file-name
+// order (the order Lightroom exported them in). skipped
 // holds files that aren't JPEGs, tooBig JPEGs over ENTRY_MAX_BYTES.
 export async function openInput(src) {
   const stat = await fs.stat(src).catch(() => null);
@@ -63,7 +80,7 @@ async function openFolder(dir) {
     }
     files.push({ name, size, read: () => fs.readFile(full) });
   }
-  return { photos: files.sort(byName), skipped, tooBig, close() {} };
+  return { photos: files.sort(byOrder), skipped, tooBig, close() {} };
 }
 
 async function openZip(file) {
@@ -111,7 +128,7 @@ async function openZip(file) {
         }),
     });
   }
-  return { photos: photos.sort(byName), skipped, tooBig, close: () => zip.close() };
+  return { photos: photos.sort(byOrder), skipped, tooBig, close: () => zip.close() };
 }
 
 // Writes thumbs/<file>, photos/<file> (the download) and, when the original

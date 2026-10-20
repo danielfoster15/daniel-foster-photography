@@ -10,7 +10,7 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
 import { parseArgs } from "node:util";
-import { ENTRY_MAX_MB, buildZips, openInput, processPhoto } from "./lib/photos.mjs";
+import { ENTRY_MAX_MB, bestNumber, buildZips, openInput, processPhoto } from "./lib/photos.mjs";
 import { countFiles, formatBytes, serve, writeGallery, writeShared } from "./lib/site.mjs";
 import * as ws from "./lib/workspace.mjs";
 import { findPagesUrl, mustWrangler, parseAccounts, useAccount, wrangler } from "./lib/wrangler.mjs";
@@ -239,6 +239,7 @@ async function cmdNew(src, options) {
     console.log(`Making "${title}" from ${input.photos.length} photos...`);
     const { results, failed } = await processAll(input, buildDir);
     const kept = results.flatMap((photo, i) => (photo ? [{ photo, source: input.photos[i].name }] : []));
+    for (const { photo, source } of kept) photo.best = bestNumber(source) !== undefined;
     if (kept.length === 0) throw new Error(`None of the photos could be read:\n  ${failed.join("\n  ")}`);
     await nameFiles(kept, buildDir, prefix, options["keep-names"]);
 
@@ -260,7 +261,13 @@ async function cmdNew(src, options) {
     saved = true;
 
     const total = shoot.photos.reduce((sum, p) => sum + p.bytes, 0);
+    const best = shoot.photos.filter((p) => p.best).length;
     console.log(`\nMade "${title}": ${shoot.photos.length} photos, ${formatBytes(total)}.`);
+    console.log(
+      best > 0
+        ? `${best} highlight${best === 1 ? "" : "s"} (best1.jpg, best2.jpg, ...) shown large at the top.`
+        : "No photos named best1.jpg, best2.jpg, ... so the page opens with the grid.",
+    );
     if (input.skipped.length > 0) console.log(`Skipped (not JPGs): ${input.skipped.join(", ")}`);
     if (input.tooBig.length > 0) console.log(`Skipped (over ${ENTRY_MAX_MB} MB, too big for a photo export): ${input.tooBig.join(", ")}`);
     if (failed.length > 0) console.log(`Couldn't read, left out:\n  ${failed.join("\n  ")}`);

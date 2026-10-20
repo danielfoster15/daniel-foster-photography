@@ -42,6 +42,17 @@ a {
   color: inherit;
 }
 
+/* The grid and viewer set display, which would otherwise beat the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
 .top {
   max-width: 1280px;
   margin: 0 auto;
@@ -119,6 +130,173 @@ h1 {
   font-size: 0.875rem;
 }
 
+/* Highlights: the best photos, large, one under the other. */
+.highlights {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto 64px;
+}
+
+.highlights img {
+  display: block;
+  max-width: 100%;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+}
+
+.section-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  max-width: 1600px;
+  margin: 0 auto 16px;
+}
+
+.section-bar h2 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.toggle {
+  border: 1px solid #fff;
+  background: transparent;
+  padding: 8px 20px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  background: #fff;
+  color: #000;
+}
+
+/* Viewer: one photo at a time in a row you swipe or scroll sideways. */
+.viewer {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.stage {
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.slides::-webkit-scrollbar {
+  display: none;
+}
+
+.slides:focus-visible {
+  outline: 1px solid #737373;
+  outline-offset: 4px;
+}
+
+.slide {
+  flex: 0 0 100%;
+  /* 125vw keeps landscape photos from floating in empty space on phones. */
+  height: min(78vh, 1000px, 125vw);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.slide .photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.slide img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  transition: opacity 0.2s;
+}
+
+.arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.arrow.prev {
+  left: 8px;
+}
+
+.arrow.next {
+  right: 8px;
+}
+
+.arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+  color: #d4d4d4;
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.save-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.save-current svg {
+  width: 18px;
+  height: 18px;
+}
+
+.save-current:hover {
+  color: #fff;
+}
+
 /* Justified rows: each tile grows in proportion to its aspect ratio (--r),
    so every row fills the width and nothing gets cropped. */
 .grid {
@@ -165,7 +343,7 @@ h1 {
   object-fit: cover;
 }
 
-.photo {
+.tile .photo {
   position: absolute;
   inset: 0;
 }

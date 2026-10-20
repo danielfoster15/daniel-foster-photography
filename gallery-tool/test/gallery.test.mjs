@@ -10,7 +10,7 @@ import yazl from "yazl";
 import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
 import { promisify } from "node:util";
-import { buildZips, openInput, processPhoto } from "../lib/photos.mjs";
+import { bestNumber, buildZips, openInput, processPhoto } from "../lib/photos.mjs";
 import { galleryHtml } from "../lib/site.mjs";
 import { findPagesUrl, parseAccounts, wranglerBin } from "../lib/wrangler.mjs";
 
@@ -205,4 +205,47 @@ test("new keeps nothing when no photo can be read, and refuses an unquoted title
   const unquoted = await run(["new", zip, "--title", "Phantom", "Four"], home);
   assert.equal(unquoted.code, 1);
   assert.match(unquoted.out, /Put titles and dates in quotes/);
+});
+
+test("photos named best1.jpg, best2.jpg, ... come first, in number order", async () => {
+  assert.equal(bestNumber("shoot/best1.jpg"), 1);
+  assert.equal(bestNumber("Best 12.JPG"), 12);
+  assert.equal(bestNumber("best_3.jpeg"), 3);
+  assert.equal(bestNumber("bestival.jpg"), undefined);
+  assert.equal(bestNumber("best1/IMG_1.jpg"), undefined);
+
+  const file = path.join(tmp, "best.zip");
+  const photo = await jpeg(40, 30);
+  await writeZip(file, [
+    ["IMG_1.jpg", photo],
+    ["best10.jpg", photo],
+    ["IMG_2.jpg", photo],
+    ["Best 2.JPG", photo],
+  ]);
+  const input = await openInput(file);
+  input.close();
+  assert.deepEqual(input.photos.map((p) => p.name), ["Best 2.JPG", "best10.jpg", "IMG_1.jpg", "IMG_2.jpg"]);
+});
+
+test("highlights show large, the rest one at a time, and the grid waits behind the button", () => {
+  const photo = (file, best) => ({ file, best, tw: 780, th: 520, lw: 2560, lh: 1707, large: true });
+  const config = { siteName: "DF", mainSiteUrl: "https://example.com", credit: "© me", r2PublicUrl: "" };
+  const withBest = galleryHtml(
+    { slug: "s", title: "T", date: "", photos: [photo("t-001.jpg", true), photo("t-002.jpg", false), photo("t-003.jpg", false)], zips: [] },
+    config,
+  );
+  assert.match(withBest, /<section class="highlights"[^>]*>\s*<a class="photo" href="\/s\/large\/t-001.jpg"/);
+  assert.equal((withBest.match(/<li class="slide">/g) ?? []).length, 2);
+  assert.match(withBest, /<span class="count" aria-live="polite">1 \/ 2<\/span>/);
+  assert.match(withBest, /<section class="viewer" aria-label="Photos, one at a time">/);
+  assert.match(withBest, /<main class="grid" hidden>/);
+  assert.equal((withBest.match(/<figure class="tile"/g) ?? []).length, 3);
+  assert.doesNotMatch(withBest.slice(withBest.indexOf('<main class="grid"')), /<img (?![^>]*loading="lazy")/);
+
+  // Without highlights the page opens on the grid, as before.
+  const plain = galleryHtml({ slug: "s", title: "T", date: "", photos: [photo("t-001.jpg", false)], zips: [] }, config);
+  assert.doesNotMatch(plain, /class="highlights"/);
+  assert.match(plain, /<section class="viewer" aria-label="Photos, one at a time" hidden>/);
+  assert.match(plain, /<main class="grid">/);
+  assert.match(plain, /Show one at a time<\/button>/);
 });
