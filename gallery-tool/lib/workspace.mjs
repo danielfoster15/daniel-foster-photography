@@ -24,6 +24,7 @@ const configFile = path.join(home, "config.json");
 export const defaults = {
   pagesProject: "danielfoster-galleries",
   siteUrl: "",
+  pagesUrl: "",
   accountId: "",
   r2Bucket: "danielfoster-galleries",
   r2PublicUrl: "",
@@ -85,5 +86,5 @@ export const zipsOnline = (shoot) => shoot.zips.length > 0 && shoot.zips.every((
 
 export function galleryUrl(config, slug) {
   const base = (config.siteUrl || `https://${config.pagesProject}.pages.dev`).replace(/\/+$/, "");
-  return `${base}/${slug}/`;
+  return `${base}/${slug}`;
 }

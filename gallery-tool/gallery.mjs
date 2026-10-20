@@ -4,7 +4,7 @@
 // See README.md for setup and the per-shoot steps.
 
 import { randomBytes } from "node:crypto";
-import { rmSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -18,6 +18,7 @@ import { findPagesUrl, mustWrangler, parseAccounts, useAccount, wrangler } from 
 const HELP = `Client galleries
 
   node gallery.mjs setup                         one time: log in to Cloudflare, create the site and storage
+  node gallery.mjs domain galleries.example.com  use your own address for the links (see README)
   node gallery.mjs new <zip-or-folder> --title "Phantom Four" [--date "11 October 2026"]
                                                  make a gallery from your exported JPGs
   node gallery.mjs preview                       look at the galleries on this computer first
@@ -26,8 +27,10 @@ const HELP = `Client galleries
   node gallery.mjs remove <name>                 take a gallery offline and delete it
 
 Options for new:
-  --title "..."     shown on the page and used for the file names (required)
+  --title "..."     shown on the page and used for the address and file names (required)
   --date "..."      shown under the title, written however you like
+  --address name    use another address than the title, e.g. --address phantom-four-2026
+  --private         add a random code to the address so it can't be guessed
   --keep-names      keep your original file names instead of title-001.jpg, title-002.jpg, ...
 
 Galleries are kept in ${ws.home}
@@ -49,7 +52,7 @@ function slugify(text) {
   );
 }
 
-// The secret part of a gallery's address. The title part is easy to guess, so
+// The code --private adds to an address. The title part is easy to guess, so
 // this carries it all: 10 characters from 32 is 50 bits, far beyond guessing.
 // Lowercase letters and digits, without look-alikes (0/o, 1/l).
 function randomSuffix(length = 10) {
@@ -74,6 +77,7 @@ async function ask(question) {
 async function cmdSetup(options) {
   const config = await ws.loadConfig();
   const projectChanged = Boolean(options.project) && options.project !== config.pagesProject;
+  if (projectChanged) config.pagesUrl = "";
   if (options.project) config.pagesProject = options.project;
   if (options.bucket) config.r2Bucket = options.bucket;
 
@@ -111,10 +115,9 @@ async function cmdSetup(options) {
   }
   let pagesUrl = pages.out.match(/https:\/\/[a-z0-9-]+\.pages\.dev/)?.[0];
   if (!pagesUrl) pagesUrl = findPagesUrl((await wrangler(["pages", "project", "list"], { capture: true })).out, config.pagesProject);
+  config.pagesUrl = pagesUrl ?? `https://${config.pagesProject}.pages.dev`;
   // Keep a custom domain the user set, unless the project itself changed.
-  if (!config.siteUrl || projectChanged || /\.pages\.dev\/?$/.test(config.siteUrl)) {
-    config.siteUrl = pagesUrl ?? `https://${config.pagesProject}.pages.dev`;
-  }
+  if (!config.siteUrl || projectChanged || /\.pages\.dev\/?$/.test(config.siteUrl)) config.siteUrl = config.pagesUrl;
   console.log(`  Galleries will be at ${config.siteUrl}/...`);
 
   if (options["skip-r2"]) {
@@ -214,14 +217,25 @@ async function cmdNew(src, options) {
   if (!title) throw new Error('Add a title: --title "Phantom Four"');
   const config = await ws.loadConfig();
   const prefix = slugify(title);
-  const slug = `${prefix}-${randomSuffix()}`;
+  let slug = options.address ? slugify(options.address) : prefix;
+  if (options.private) slug = `${slug}-${randomSuffix()}`;
+  // site/assets holds the files every gallery shares.
+  if (slug === "assets") throw new Error('"assets" is taken by the site itself. Pick another address with --address.');
+  if (existsSync(path.join(ws.shootsDir, `${slug}.json`)) || existsSync(path.join(ws.siteDir, slug))) {
+    throw new Error(
+      `There's already a gallery at /${slug}. Give this one another address (--address ${slug}-2) or remove the old one first.`,
+    );
+  }
   // Built outside site/ and moved in when complete, so a deploy never
   // uploads a half-made gallery.
   const buildDir = path.join(ws.buildingDir, slug);
   const finalDir = path.join(ws.siteDir, slug);
+  // Only removes finalDir once this run has moved the gallery there, so a
+  // clash with a gallery that appeared meanwhile never deletes that one.
+  let moved = false;
   const cleanUp = () => {
     rmSync(buildDir, { recursive: true, force: true });
-    rmSync(finalDir, { recursive: true, force: true });
+    if (moved) rmSync(finalDir, { recursive: true, force: true });
   };
   const onInterrupt = () => {
     cleanUp();
@@ -256,6 +270,7 @@ async function cmdNew(src, options) {
     await fs.mkdir(ws.siteDir, { recursive: true });
     await writeShared(ws.siteDir, config);
     await fs.rename(buildDir, finalDir);
+    moved = true;
     await writeGallery(ws.siteDir, shoot, config);
     await ws.saveShoot(shoot);
     saved = true;
@@ -283,6 +298,40 @@ async function cmdNew(src, options) {
     input.close();
     if (!saved) cleanUp();
   }
+}
+
+// Points the printed links at your own address. Cloudflare and your domain
+// provider need setting up too; this prints how.
+async function cmdDomain(domain) {
+  const host = domain?.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/+$/, "");
+  if (!host || !/^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(host)) {
+    throw new Error("Say which address: node gallery.mjs domain galleries.danielfosterphotography.nl");
+  }
+  const config = await ws.loadConfig();
+  const target = (config.pagesUrl || `https://${config.pagesProject}.pages.dev`).replace(/^https:\/\//, "").replace(/\/+$/, "");
+  const name = host.split(".").slice(0, -2).join(".");
+  if (!name) {
+    // A bare domain only works on Cloudflare Pages if the domain's DNS moves to Cloudflare.
+    throw new Error(`Use a subdomain, like galleries.${host}: your main site already lives on ${host}.`);
+  }
+  config.siteUrl = `https://${host}`;
+  await ws.saveConfig(config);
+  console.log(`Links will now use https://${host}/...
+
+Two things to set up once, if you haven't yet:
+
+1. Cloudflare: in the dashboard open Workers & Pages, then "${config.pagesProject}", then
+   Custom domains. Click "Set up a custom domain", enter ${host} and continue.
+
+2. Your domain provider (Porkbun: Domain Management, then DNS next to your domain): add a record
+     Type:    CNAME
+     Host:    ${name}
+     Answer:  ${target}
+   Leave the rest as it is. If Cloudflare shows a different value to use, use that.
+
+Cloudflare checks the record and turns on HTTPS by itself. That takes a few minutes, sometimes
+up to a day; the custom domain shows "Active" when it's ready. Until then, links on
+${target} keep working.`);
 }
 
 async function cmdPreview(options) {
@@ -449,6 +498,8 @@ async function main() {
       title: { type: "string" },
       date: { type: "string" },
       "keep-names": { type: "boolean" },
+      address: { type: "string" },
+      private: { type: "boolean" },
       port: { type: "string" },
       project: { type: "string" },
       bucket: { type: "string" },
@@ -466,6 +517,8 @@ async function main() {
   switch (command) {
     case "setup":
       return cmdSetup(options);
+    case "domain":
+      return cmdDomain(arg);
     case "new":
       return cmdNew(arg, options);
     case "preview":
