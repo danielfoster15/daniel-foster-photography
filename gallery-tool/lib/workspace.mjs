@@ -5,7 +5,8 @@
 //     config.json            Cloudflare project/bucket names and page text
 //     shoots/<slug>.json     one manifest per gallery (title, photos, zips)
 //     site/                  what gets deployed to Cloudflare Pages
-//     zips/<slug>/           download-all zips, deleted once they're on R2
+//     building/<slug>/       a gallery while `new` makes it, moved into site/ when done
+//     zips/<slug>/           download-all zips, deleted once they're all on R2
 
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -15,6 +16,7 @@ export const home = path.resolve(
   process.env.GALLERY_HOME || path.join(os.homedir(), "client-galleries"),
 );
 export const siteDir = path.join(home, "site");
+export const buildingDir = path.join(home, "building");
 export const shootsDir = path.join(home, "shoots");
 export const zipsDir = path.join(home, "zips");
 const configFile = path.join(home, "config.json");
@@ -22,6 +24,7 @@ const configFile = path.join(home, "config.json");
 export const defaults = {
   pagesProject: "danielfoster-galleries",
   siteUrl: "",
+  accountId: "",
   r2Bucket: "danielfoster-galleries",
   r2PublicUrl: "",
   siteName: "Daniel Foster Photography",
@@ -29,6 +32,14 @@ export const defaults = {
   credit:
     "All photos © Daniel Foster. When you share them, please credit @danielfoster.photography",
 };
+
+// Write to a temporary file, then rename: an interrupted write leaves the old file intact.
+async function writeJson(file, data) {
+  await fs.mkdir(path.dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.tmp`;
+  await fs.writeFile(tmp, JSON.stringify(data, null, 2) + "\n");
+  await fs.rename(tmp, file);
+}
 
 export async function loadConfig() {
   try {
@@ -39,10 +50,7 @@ export async function loadConfig() {
   }
 }
 
-export async function saveConfig(config) {
-  await fs.mkdir(home, { recursive: true });
-  await fs.writeFile(configFile, JSON.stringify(config, null, 2) + "\n");
-}
+export const saveConfig = (config) => writeJson(configFile, config);
 
 export async function loadShoots() {
   let names;
@@ -64,19 +72,16 @@ export async function loadShoots() {
   return shoots.sort((a, b) => b.created.localeCompare(a.created));
 }
 
-export async function saveShoot(shoot) {
-  await fs.mkdir(shootsDir, { recursive: true });
-  await fs.writeFile(
-    path.join(shootsDir, `${shoot.slug}.json`),
-    JSON.stringify(shoot, null, 2) + "\n",
-  );
-}
+export const saveShoot = (shoot) => writeJson(path.join(shootsDir, `${shoot.slug}.json`), shoot);
 
 export async function deleteShoot(slug) {
   await fs.rm(path.join(shootsDir, `${slug}.json`), { force: true });
   await fs.rm(path.join(siteDir, slug), { recursive: true, force: true });
   await fs.rm(path.join(zipsDir, slug), { recursive: true, force: true });
 }
+
+// True once every part of the download-all zip is on R2.
+export const zipsOnline = (shoot) => shoot.zips.length > 0 && shoot.zips.every((z) => z.uploaded);
 
 export function galleryUrl(config, slug) {
   const base = (config.siteUrl || `https://${config.pagesProject}.pages.dev`).replace(/\/+$/, "");

@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { zipsOnline } from "./workspace.mjs";
 
 const toolDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const repoDir = path.dirname(toolDir);
@@ -85,8 +86,8 @@ export async function writeShared(siteDir, config) {
 }
 
 function downloadsHtml(shoot, config) {
-  const zips = shoot.zips ?? [];
-  if (!config.r2PublicUrl || zips.length === 0 || !zips.every((z) => z.uploaded)) return "";
+  if (!config.r2PublicUrl || !zipsOnline(shoot)) return "";
+  const zips = shoot.zips;
   const base = config.r2PublicUrl.replace(/\/+$/, "");
   const href = (zip) => `${base}/${encodeURIComponent(shoot.slug)}/${encodeURIComponent(zip.name)}`;
   if (zips.length === 1) {
@@ -182,11 +183,14 @@ export function serve(siteDir, port) {
         file = path.join(file, "index.html");
         stat = await fs.stat(file);
       }
+      const body = await fs.readFile(file);
       res.writeHead(200, { "Content-Type": TYPES[path.extname(file).toLowerCase()] ?? "application/octet-stream" });
-      res.end(await fs.readFile(file));
+      res.end(body);
     } catch {
+      if (res.headersSent) return res.destroy();
+      const body = await fs.readFile(path.join(root, "404.html")).catch(() => "Not found");
       res.writeHead(404, { "Content-Type": TYPES[".html"] });
-      res.end(await fs.readFile(path.join(root, "404.html")).catch(() => "Not found"));
+      res.end(body);
     }
   });
   return new Promise((resolve, reject) => {

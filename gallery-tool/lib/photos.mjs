@@ -12,7 +12,7 @@ import yazl from "yazl";
 const JPEG = /\.jpe?g$/i;
 // Cloudflare Pages refuses files over 25 MiB; keep some headroom.
 const ORIGINAL_MAX_BYTES = 24.5 * 1024 * 1024;
-// Bigger than this in the source zip isn't a photo export; don't load it into memory.
+// Bigger than this isn't a photo export; don't load it into memory.
 const ENTRY_MAX_BYTES = 200 * 1024 * 1024;
 // Grid thumbnails: rows are at most 260px tall, so 520px covers 2x screens.
 const THUMB_HEIGHT = 520;
@@ -22,6 +22,7 @@ const LARGE_EDGE = 2560;
 const LARGE_MAX_BYTES_AS_IS = 3 * 1024 * 1024;
 // wrangler uploads at most 300 MiB per R2 object, so big shoots get several zips.
 export const ZIP_PART_MAX_BYTES = 290 * 1024 * 1024;
+export const ENTRY_MAX_MB = ENTRY_MAX_BYTES / 1024 / 1024;
 
 // Junk that zips made on a Mac or Windows carry along.
 function isJunk(name) {
@@ -31,8 +32,9 @@ function isJunk(name) {
 
 const byName = (a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
 
-// Returns { photos: [{ name, size, read() }], skipped: [name], close() },
-// photos in file-name order (the order Lightroom exported them in).
+// Returns { photos: [{ name, size, read() }], skipped: [name], tooBig: [name], close() },
+// photos in file-name order (the order Lightroom exported them in). skipped
+// holds files that aren't JPEGs, tooBig JPEGs over ENTRY_MAX_BYTES.
 export async function openInput(src) {
   const stat = await fs.stat(src).catch(() => null);
   if (!stat) throw new Error(`Can't find ${src}`);
@@ -44,6 +46,7 @@ export async function openInput(src) {
 async function openFolder(dir) {
   const files = [];
   const skipped = [];
+  const tooBig = [];
   for (const entry of await fs.readdir(dir, { recursive: true, withFileTypes: true })) {
     if (!entry.isFile()) continue;
     const full = path.join(entry.parentPath, entry.name);
@@ -54,9 +57,13 @@ async function openFolder(dir) {
       continue;
     }
     const { size } = await fs.stat(full);
+    if (size > ENTRY_MAX_BYTES) {
+      tooBig.push(name);
+      continue;
+    }
     files.push({ name, size, read: () => fs.readFile(full) });
   }
-  return { photos: files.sort(byName), skipped, close() {} };
+  return { photos: files.sort(byName), skipped, tooBig, close() {} };
 }
 
 async function openZip(file) {
@@ -77,11 +84,16 @@ async function openZip(file) {
   });
   const photos = [];
   const skipped = [];
+  const tooBig = [];
   for (const entry of entries) {
     const name = entry.fileName;
     if (name.endsWith("/") || isJunk(name)) continue;
-    if (!JPEG.test(name) || entry.uncompressedSize > ENTRY_MAX_BYTES) {
+    if (!JPEG.test(name)) {
       skipped.push(name);
+      continue;
+    }
+    if (entry.uncompressedSize > ENTRY_MAX_BYTES) {
+      tooBig.push(name);
       continue;
     }
     photos.push({
@@ -99,7 +111,7 @@ async function openZip(file) {
         }),
     });
   }
-  return { photos: photos.sort(byName), skipped, close: () => zip.close() };
+  return { photos: photos.sort(byName), skipped, tooBig, close: () => zip.close() };
 }
 
 // Writes thumbs/<file>, photos/<file> (the download) and, when the original

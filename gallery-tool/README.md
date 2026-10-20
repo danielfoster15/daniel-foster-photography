@@ -10,7 +10,7 @@ danielfosterphotography.nl: black background, white text, the LT Remark font. It
 
 Galleries are hosted on Cloudflare's free plan: **Pages** for the page and photos, **R2** for the
 download-all zips. Only people with the link find a gallery. Its address ends in a random code
-(like `/phantom-four-k8x2q9/`), it isn't linked from anywhere, and it tells search engines not to
+(like `/phantom-four-k8x2q9m4tw/`), it isn't linked from anywhere, and it tells search engines not to
 list it.
 
 Your photos never go into this repository, because the repository is public. Everything is kept in
@@ -33,8 +33,9 @@ a `client-galleries` folder in your home folder and uploaded straight to Cloudfl
    ```sh
    node gallery.mjs setup
    ```
-   A browser window opens: log in to Cloudflare and click *Allow*. Setup then creates the site and
-   the storage, and prints the address your galleries will be at.
+   A browser window opens: log in to Cloudflare and click *Allow*. If your login has several
+   Cloudflare accounts, setup asks which one to use. It then creates the site and the storage, and
+   prints the address your galleries will be at.
 
 ## For each shoot
 
@@ -44,7 +45,8 @@ a `client-galleries` folder in your home folder and uploaded straight to Cloudfl
    node gallery.mjs new ~/Downloads/phantom-four.zip --title "Phantom Four" --date "11 October 2026"
    ```
    The photos are renamed `phantom-four-001.jpg`, `phantom-four-002.jpg` and so on. To keep your own
-   file names, add `--keep-names`. The date is optional and can be written however you like.
+   file names, add `--keep-names`. The date is optional and can be written however you like. Put
+   the title and date in quotes. Press Ctrl+C to stop partway; nothing is kept.
 3. Look at it on your computer first (optional):
    ```sh
    node gallery.mjs preview
@@ -62,7 +64,7 @@ a `client-galleries` folder in your home folder and uploaded straight to Cloudfl
 | Command | What it does |
 | --- | --- |
 | `node gallery.mjs list` | Shows every gallery with its link. |
-| `node gallery.mjs remove <name>` | Takes a gallery offline and deletes your computer's copy. Your original zip isn't touched. The names are in `list`. |
+| `node gallery.mjs remove <name>` | Takes a gallery offline and deletes your computer's copy. Your original zip isn't touched. The names are in `list`. Taking a page down redeploys the whole site, so galleries you made since your last deploy go online too; `remove` names them and asks first. |
 | `node gallery.mjs help` | Shows all the commands. |
 
 ## Good to know
