@@ -1,0 +1,229 @@
+/* Client gallery pages. Same look as danielfosterphotography.nl: black,
+   white text, LT Remark (SIL Open Font License, see fonts/README.md). */
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Remark";
+  src: url("fonts/LTRemark-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 20px;
+  background: #000;
+  color: #fff;
+  font-family: "LT Remark", Georgia, "Times New Roman", serif;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 0 80px;
+  }
+}
+
+a {
+  color: inherit;
+}
+
+.top {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 0 32px;
+  text-align: center;
+}
+
+.brand {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+h1 {
+  margin: 32px 0 8px;
+  font-size: clamp(1.875rem, 6vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  margin: 0;
+  color: #a3a3a3;
+  font-size: 0.875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.downloads {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.button {
+  display: inline-block;
+  border: 1px solid #fff;
+  padding: 14px 32px;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: #fff;
+  color: #000;
+}
+
+.button small {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.parts-note {
+  margin: 32px 0 -16px;
+  color: #d4d4d4;
+  font-size: 0.875rem;
+}
+
+.hint {
+  margin: 24px auto 0;
+  max-width: 36rem;
+  color: #a3a3a3;
+  font-size: 0.875rem;
+}
+
+/* Justified rows: each tile grows in proportion to its aspect ratio (--r),
+   so every row fills the width and nothing gets cropped. */
+.grid {
+  --row: 150px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    --row: 260px;
+  }
+}
+
+/* Keeps the last row from stretching a lone photo across the page. */
+.grid::after {
+  content: "";
+  flex-grow: 1000000;
+}
+
+.tile {
+  position: relative;
+  flex-grow: var(--r);
+  flex-basis: calc(var(--r) * var(--row));
+  min-width: 0;
+  margin: 0;
+  background: #171717;
+}
+
+.tile::before {
+  content: "";
+  display: block;
+  padding-bottom: calc(100% / var(--r));
+}
+
+.tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+}
+
+.save {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.save svg {
+  width: 18px;
+  height: 18px;
+}
+
+.tile:hover .save,
+.save:focus-visible {
+  opacity: 1;
+}
+
+/* No hover on phones: always show the button. */
+@media (hover: none) {
+  .save {
+    opacity: 0.85;
+  }
+}
+
+footer {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 48px 0 64px;
+  color: #d4d4d4;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+footer p {
+  margin: 0 0 8px;
+}
+
+.notice {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.notice p {
+  color: #a3a3a3;
+}
