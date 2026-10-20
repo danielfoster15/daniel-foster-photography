@@ -109,32 +109,94 @@ ${buttons.join("\n")}
     </div>`;
 }
 
+const ARROW_LEFT =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>';
+const ARROW_RIGHT =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>';
+
+// A link that opens the photo in the full-screen viewer, wrapped around inner.
+function photoLink(slug, p, inner) {
+  const view = p.large ? `/${slug}/large/${p.file}` : `/${slug}/photos/${p.file}`;
+  return `<a class="photo" href="${esc(view)}" data-pswp-width="${p.lw}" data-pswp-height="${p.lh}" data-download="${esc(`/${slug}/photos/${p.file}`)}" data-filename="${esc(p.file)}">${inner}</a>`;
+}
+
+// The image shown at the size of the screen: the large version, or the original if it's small.
+function screenImg(slug, p, alt, lazy) {
+  const src = p.large ? `/${slug}/large/${p.file}` : `/${slug}/photos/${p.file}`;
+  return `<img src="${esc(src)}" width="${p.lw}" height="${p.lh}" alt="${alt}"${lazy ? ' loading="lazy"' : ""} decoding="async" />`;
+}
+
+// The page has up to three parts:
+//   highlights  photos named best1.jpg, best2.jpg, ... shown large, one under the other
+//   viewer      the other photos, one at a time, swiped or stepped through with arrows
+//   grid        every photo as thumbnails
+// The viewer and grid share a spot and a button switches between them. Without
+// highlights the grid shows first, as a plain gallery.
 export function galleryHtml(shoot, config) {
+  const slug = shoot.slug;
   const n = shoot.photos.length;
+  const number = new Map(shoot.photos.map((p, i) => [p, i + 1]));
+  const label = (p) => `Photo ${number.get(p)} of ${n}`;
   const meta = [shoot.date, `${n} photo${n === 1 ? "" : "s"}`].filter(Boolean).map(esc).join(" · ");
-  const base = `/${shoot.slug}`;
+  const best = shoot.photos.filter((p) => p.best);
+  const rest = shoot.photos.filter((p) => !p.best);
+  const gridFirst = best.length === 0;
+
+  const highlights = best.map(
+    (p, i) => `    ${photoLink(slug, p, screenImg(slug, p, label(p), i >= 2))}`,
+  );
+  const slides = rest.map(
+    (p, i) => `        <li class="slide">${photoLink(slug, p, screenImg(slug, p, label(p), i >= 1))}</li>`,
+  );
   const tiles = shoot.photos.map((p, i) => {
-    const label = `Photo ${i + 1} of ${n}`;
-    const view = p.large ? `${base}/large/${p.file}` : `${base}/photos/${p.file}`;
-    const download = `${base}/photos/${p.file}`;
+    // Thumbnails in a hidden grid would all load at once unless they're lazy.
+    const lazy = !gridFirst || i >= 12;
+    const thumb = `<img src="${esc(`/${slug}/thumbs/${p.file}`)}" width="${p.tw}" height="${p.th}" alt="${label(p)}"${lazy ? ' loading="lazy"' : ""} decoding="async" />`;
     return `    <figure class="tile" style="--r:${(p.tw / p.th).toFixed(4)}">
-      <a class="photo" href="${esc(view)}" data-pswp-width="${p.lw}" data-pswp-height="${p.lh}" data-download="${esc(download)}" data-filename="${esc(p.file)}">
-        <img src="${esc(`${base}/thumbs/${p.file}`)}" width="${p.tw}" height="${p.th}" alt="${label}"${i < 12 ? "" : ' loading="lazy"'} decoding="async" />
-      </a>
-      <a class="save" href="${esc(download)}" download="${esc(p.file)}" aria-label="Download ${label.toLowerCase()}">${DOWNLOAD_ICON}</a>
+      ${photoLink(slug, p, thumb)}
+      <a class="save" href="${esc(`/${slug}/photos/${p.file}`)}" download="${esc(p.file)}" aria-label="Download ${label(p).toLowerCase()}">${DOWNLOAD_ICON}</a>
     </figure>`;
   });
+
+  let restHtml = "";
+  if (rest.length > 0) {
+    const viewerTitle = best.length > 0 ? `More photos · ${rest.length}` : `All photos · ${n}`;
+    const gridTitle = `All photos · ${n}`;
+    const first = rest[0];
+    restHtml = `
+  <div class="section-bar">
+    <h2 data-viewer="${viewerTitle}" data-grid="${gridTitle}">${gridFirst ? gridTitle : viewerTitle}</h2>
+    <button class="toggle" type="button" data-viewer="Show all in a grid" data-grid="Show one at a time">${gridFirst ? "Show one at a time" : "Show all in a grid"}</button>
+  </div>
+  <section class="viewer" aria-label="Photos, one at a time"${gridFirst ? " hidden" : ""}>
+    <div class="stage">
+      <ul class="slides" tabindex="0">
+${slides.join("\n")}
+      </ul>
+      <button class="arrow prev" type="button" aria-label="Previous photo" disabled>${ARROW_LEFT}</button>
+      <button class="arrow next" type="button" aria-label="Next photo"${rest.length === 1 ? " disabled" : ""}>${ARROW_RIGHT}</button>
+    </div>
+    <div class="viewer-bar">
+      <span class="count" aria-live="polite">1 / ${rest.length}</span>
+      <a class="save-current" href="${esc(`/${slug}/photos/${first.file}`)}" download="${esc(first.file)}">${DOWNLOAD_ICON} Download</a>
+    </div>
+  </section>
+  <main class="grid"${gridFirst ? "" : " hidden"}>
+${tiles.join("\n")}
+  </main>`;
+  }
+
   return `${head(shoot.title, config)}
 <body>
   <header class="top">
     <a class="brand" href="${esc(config.mainSiteUrl)}">${esc(config.siteName)}</a>
     <h1>${esc(shoot.title)}</h1>
     <p class="meta">${meta}</p>${downloadsHtml(shoot, config)}
-    <p class="hint">Click or tap a photo to see it full screen. The arrow button downloads the full-size file.</p>
-  </header>
-  <main class="grid">
-${tiles.join("\n")}
-  </main>
+    <p class="hint">Click or tap any photo to see it full screen. The download buttons save the full-size file.</p>
+  </header>${best.length > 0 ? `
+  <section class="highlights" aria-label="Highlights">
+${highlights.join("\n")}
+  </section>` : ""}${restHtml}
   <footer>
     <p>${esc(config.credit)}</p>
   </footer>
