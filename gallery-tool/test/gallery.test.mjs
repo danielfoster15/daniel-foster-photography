@@ -185,7 +185,7 @@ test("new makes a gallery from a zip, numbering only the photos it could read", 
   assert.match(r.out, /Couldn't read, left out:\n  b\.jpg/);
   const [manifest] = await fs.readdir(path.join(home, "shoots"));
   const shoot = JSON.parse(await fs.readFile(path.join(home, "shoots", manifest), "utf8"));
-  assert.match(shoot.slug, /^phantom-four-[a-z2-9]{10}$/);
+  assert.equal(shoot.slug, "phantom-four");
   assert.deepEqual(shoot.photos.map((p) => p.file), ["phantom-four-001.jpg", "phantom-four-002.jpg"]);
   assert.deepEqual((await fs.readdir(path.join(home, "site", shoot.slug, "photos"))).sort(), ["phantom-four-001.jpg", "phantom-four-002.jpg"]);
   assert.ok(existsSync(path.join(home, "site", shoot.slug, "index.html")));
@@ -248,4 +248,36 @@ test("highlights show large, the rest one at a time, and the grid waits behind t
   assert.match(plain, /<section class="viewer" aria-label="Photos, one at a time" hidden>/);
   assert.match(plain, /<main class="grid">/);
   assert.match(plain, /Show one at a time<\/button>/);
+});
+
+test("addresses: the title by default, --address to choose, --private adds a code, no clashes", async () => {
+  const home = path.join(tmp, "home-addr");
+  const zip = path.join(tmp, "addr.zip");
+  await writeZip(zip, [["a.jpg", await jpeg(60, 40)]]);
+  const slugs = async () => (await fs.readdir(path.join(home, "shoots"))).map((f) => f.replace(/\.json$/, "")).sort();
+
+  assert.equal((await run(["new", zip, "--title", "Phantom Four"], home)).code, 0);
+  const clash = await run(["new", zip, "--title", "Phantom Four"], home);
+  assert.equal(clash.code, 1);
+  assert.match(clash.out, /already a gallery at \/phantom-four\. .*--address phantom-four-2/);
+  assert.ok(existsSync(path.join(home, "site", "phantom-four", "index.html")), "the clash leaves the first gallery alone");
+
+  assert.equal((await run(["new", zip, "--title", "Phantom Four", "--address", "PF 2026"], home)).code, 0);
+  assert.equal((await run(["new", zip, "--title", "Phantom Four", "--private"], home)).code, 0);
+  const all = await slugs();
+  assert.deepEqual(all.slice(0, 2), ["pf-2026", "phantom-four"]);
+  assert.match(all[2], /^phantom-four-[a-z2-9]{10}$/);
+
+  const reserved = await run(["new", zip, "--title", "x", "--address", "assets"], home);
+  assert.equal(reserved.code, 1);
+});
+
+test("domain points the links at your own address", async () => {
+  const home = path.join(tmp, "home-domain");
+  const r = await run(["domain", "https://Galleries.DanielFosterPhotography.nl/"], home);
+  assert.equal(r.code, 0, r.out);
+  assert.match(r.out, /Host: {4}galleries\n {5}Answer: {2}danielfoster-galleries\.pages\.dev/);
+  const config = JSON.parse(await fs.readFile(path.join(home, "config.json"), "utf8"));
+  assert.equal(config.siteUrl, "https://galleries.danielfosterphotography.nl");
+  assert.equal((await run(["domain", "danielfosterphotography.nl"], home)).code, 1);
 });
