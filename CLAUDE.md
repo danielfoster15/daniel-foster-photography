@@ -10,3 +10,6 @@
   alias, and the newsletter signup posts to Kit (form 9977241).
 - Gallery grids show the files in `images/<series>/thumbs/`; when renumbering photos, rename
   the matching thumbnails and move each `alt` text with its photo.
+- `gallery-tool/` builds client galleries for Cloudflare Pages + R2 (a separate site, see its
+  README). Client photos live in `~/client-galleries` and must never be committed here: this repo
+  is public. Run `npm test` in `gallery-tool/` after changing it.
