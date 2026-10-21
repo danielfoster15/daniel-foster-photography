@@ -28,6 +28,13 @@
       wine, a cold beer, or a warm cup of tea.
     </p>
 
+    <div class="pb-12">
+      <a href="book.html"
+        class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
+        Book now
+      </a>
+    </div>
+
     <!-- Newsletter signup, run by Kit (kit.com, form 9977241). Kit emails each
          new address a confirmation link (the form's "incentive email"), and only
          confirmed subscribers join the list. Newsletters are written and sent
@@ -85,35 +92,44 @@
       </p>
     </section>
 
-    <!-- Booking — Google Calendar appointment schedule.
-         Short share link: https://calendar.app.google/SoL6iU6MPdzuJzE76
-         To swap in a different schedule, replace the iframe src (keep ?gv=true)
-         and the button href below. -->
-    <section id="booking" class="my-20 border-t border-neutral-800 pt-16">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-signika font-bold pb-4">BOOK A SPOT</h2>
-      <p class="max-w-2xl mx-auto pb-10 text-neutral-300">
-        Pick a date below and book directly &mdash; you'll get a confirmation by email.
-      </p>
-
-      <!-- Google renders this panel in its own light theme; the white frame
-           around it is deliberate so it doesn't look broken against the page. -->
-      <div class="max-w-3xl mx-auto bg-white rounded p-2">
-        <iframe
-          src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ18zUwqA-oKoaABkjtbLdWqJU866VZqXum9h7iYn-7y5yD2xbqvbD21YQrx61ubazoYvXwpN7Si?gv=true"
-          title="Book a darkroom workshop"
-          loading="lazy" width="100%" height="700" frameborder="0"
-          style="border:0"></iframe>
-      </div>
-
-      <!-- Fallback for anyone whose browser blocks third-party frames -->
-      <div class="mt-10">
-        <a href="https://calendar.app.google/SoL6iU6MPdzuJzE76" target="_blank" rel="noreferrer"
-          class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
-          Book a spot
-        </a>
-        <p class="mt-4 text-sm text-neutral-400">
-          Prefer to ask something first? <a href="contact.html" class="underline">Get in touch</a>.
-        </p>
+    <!-- Workshop options — keep the letters in sync with the "Workshop option" question
+         on the Google booking form. -->
+    <section id="options" class="max-w-4xl mx-auto mb-12">
+      <h2 class="text-2xl md:text-3xl font-signika font-bold pb-6">WORKSHOP OPTIONS</h2>
+      <div class="grid gap-4 md:grid-cols-2 text-left">
+        <div class="border border-neutral-800 bg-neutral-900 p-6">
+          <p class="font-signika text-sm tracking-widest uppercase text-neutral-400">Option A</p>
+          <h3 class="font-signika text-xl font-bold pt-1 pb-3">Film dev and contact sheet</h3>
+          <ul class="list-disc list-outside pl-5 space-y-1 text-neutral-300">
+            <li>Shoot black &amp; white photos and bring a shot roll to class.</li>
+          </ul>
+          <p class="font-signika text-2xl font-bold pt-4">&euro;45</p>
+        </div>
+        <div class="border border-neutral-800 bg-neutral-900 p-6">
+          <p class="font-signika text-sm tracking-widest uppercase text-neutral-400">Option B</p>
+          <h3 class="font-signika text-xl font-bold pt-1 pb-3">Print a photo!</h3>
+          <ul class="list-disc list-outside pl-5 space-y-1 text-neutral-300">
+            <li>Print photos (you already have developed negatives)</li>
+            <li>We just learn to print photos &mdash; the most fun and artful part of the process</li>
+          </ul>
+          <p class="font-signika text-2xl font-bold pt-4">&euro;45</p>
+        </div>
+        <div class="border border-neutral-800 bg-neutral-900 p-6">
+          <p class="font-signika text-sm tracking-widest uppercase text-neutral-400">Option C</p>
+          <h3 class="font-signika text-xl font-bold pt-1 pb-3">Combined!</h3>
+          <ul class="list-disc list-outside pl-5 space-y-1 text-neutral-300">
+            <li>A + B on two separate nights</li>
+          </ul>
+          <p class="font-signika text-2xl font-bold pt-4">&euro;80</p>
+        </div>
+        <div class="border border-neutral-800 bg-neutral-900 p-6">
+          <p class="font-signika text-sm tracking-widest uppercase text-neutral-400">Option D</p>
+          <h3 class="font-signika text-xl font-bold pt-1 pb-3">Combined + photo walk!</h3>
+          <ul class="list-disc list-outside pl-5 space-y-1 text-neutral-300">
+            <li>Option C, with a photo walk together first</li>
+          </ul>
+          <p class="font-signika text-2xl font-bold pt-4">&euro;90</p>
+        </div>
       </div>
     </section>
   </div>

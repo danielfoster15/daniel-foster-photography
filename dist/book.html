@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daniel Foster - Book a Darkroom Workshop</title>
+  <meta name="description" content="Book a darkroom workshop with Daniel Foster in Amsterdam, NL." />
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
+  <link rel="stylesheet" href="output.css" />
+  <link rel="stylesheet" href="../styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"
+    integrity="sha384-5/joNqFnRyVWzXp99bHot6RHG+EksGp+USSgZwPar7T9SD9PKKER37n/8bXBAZGd" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-black h-screen text-white px-5 md:px-20 opacity-0 animate-fade-in transition duration-500">
+  <div id="site-nav"></div>
+
+  <div class="container mx-auto text-center">
+    <section id="booking" class="pt-10 mb-16">
+      <!-- Booking — Cal.com event "darkroom-workshops" (2 seats per slot; the
+           "Workshop option" question lives in the event's booking questions).
+           Plain iframe on purpose: Cal.com's embed.js isn't version-pinned.
+           To swap events, change the iframe src and the button href below. -->
+      <div class="max-w-4xl mx-auto">
+        <iframe
+          src="https://cal.com/daniel-f-lmnzbq/darkroom-workshops?embed=true&amp;theme=dark&amp;layout=month_view"
+          title="Book a darkroom workshop"
+          loading="lazy" width="100%" height="800" frameborder="0"
+          style="border:0"></iframe>
+      </div>
+
+      <!-- Fallback for anyone whose browser blocks third-party frames -->
+      <div class="mt-10">
+        <a href="https://cal.com/daniel-f-lmnzbq/darkroom-workshops" target="_blank" rel="noreferrer"
+          class="inline-block border border-white px-10 py-4 font-signika text-xl tracking-widest uppercase hover:bg-white hover:text-black transition duration-300">
+          Book a spot
+        </a>
+        <p class="mt-4 text-sm text-neutral-400">
+          Prefer to ask something first? <a href="contact.html" class="underline">Get in touch</a>.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="nav.js"></script>
+  <script src="footer.js"></script>
+  <script src="fade_in.js"></script>
+  <script src="menu.js"></script>
+</body>
+
+</html>
