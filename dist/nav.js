@@ -54,6 +54,9 @@
               <a href="${d}workshops.html" ${link}>WORKSHOPS${underline}</a>
             </li>
             <li class="group transition duration-300">
+              <a href="${d}prints.html" ${link}>PRINTS${underline}</a>
+            </li>
+            <li class="group transition duration-300">
               <a href="${d}about_me.html" ${link}>ABOUT ME${underline}</a>
             </li>
             <li class="group transition duration-300">
