@@ -30,11 +30,14 @@
 
           <!-- Messages are delivered by FormSubmit over HTTPS. The address in the
                action is FormSubmit's alias for the inbox, so the real email
-               address never appears in the page. -->
+               address never appears in the page.
+               The form submits the normal way (no fetch) so FormSubmit shows its
+               "I'm not a robot" check, which it skips for background (AJAX)
+               submissions; _next then brings the sender back here. -->
           <form id="contact-form" class="space-y-8" action="https://formsubmit.co/4c9482a566ebbe985f900f832e42bf82" method="POST">
             <input type="hidden" name="_subject" value="New message from danielfosterphotography.nl" />
             <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="https://danielfosterphotography.nl/dist/contact.html?sent=1" />
             <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"
               style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
             <div>
@@ -62,6 +65,7 @@
               class="py-3 px-5 text-sm font-medium text-center bg-white text-black rounded-lg sm:w-fit hover:bg-neutral-300 focus:ring-4 focus:outline-none focus:ring-neutral-500 transition duration-300 disabled:opacity-50">
               Send message
             </button>
+            <p class="text-xs text-neutral-400">After you press Send, a quick &ldquo;I&rsquo;m not a robot&rdquo; check opens, then you come back here.</p>
             <p id="contact-status" class="text-sm text-neutral-300 min-h-[1.25rem]" aria-live="polite"></p>
           </form>
         </div>
@@ -90,35 +94,24 @@
       // Links like contact.html?subject=... (the zine order button) prefill the subject.
       var presetSubject = new URLSearchParams(window.location.search).get("subject");
       if (presetSubject) form.elements.subject.value = presetSubject.slice(0, 200);
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (form.elements._honey.value) return;          // a bot filled the trap
-        var subject = form.elements.subject.value.trim();
+      form.addEventListener("submit", function () {
+        // A filled trap field needs no handling here: FormSubmit drops the message.
+        form.elements._subject.value = "Website: " + form.elements.subject.value.trim();
         button.disabled = true;
-        status.textContent = "Sending\u2026";
-        fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({
-            email: form.elements.email.value.trim(),       // becomes the reply-to address
-            subject: subject,
-            message: form.elements.message.value,
-            _subject: "Website: " + subject,
-            _template: "table",
-            _captcha: "false"
-          })
-        })
-          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-          .then(function (res) {
-            if (!res.ok || String(res.d.success) !== "true") throw new Error(res.d.message);
-            status.textContent = "Thanks \u2014 your message is on its way.";
-            form.reset();
-          })
-          .catch(function () {
-            status.textContent = "That didn\u2019t go through. Please try again in a moment, or send me a DM on Instagram.";
-          })
-          .then(function () { button.disabled = false; });
+        status.textContent = "Opening the \u201cI\u2019m not a robot\u201d check\u2026";
       });
+      // Coming back with the browser's Back button can restore the page as it
+      // was mid-submit; make the form usable again.
+      window.addEventListener("pageshow", function (e) {
+        if (e.persisted) { button.disabled = false; status.textContent = ""; }
+      });
+      // FormSubmit sends people back here with ?sent=1 once the message is sent.
+      var params = new URLSearchParams(window.location.search);
+      if (params.has("sent")) {
+        status.textContent = "Thanks \u2014 your message is on its way.";
+        // Drop the flag so a refresh doesn't show the message again.
+        history.replaceState(null, "", window.location.pathname + window.location.hash);
+      }
     })();
   </script>
 </body>
